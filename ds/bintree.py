@@ -5,6 +5,7 @@ class BinNode:
         self.right=right
         self.weight=weight
 
+#只有前序遍历的虚拟结点集合才能还原二叉树
 def build(array):
     data = array.pop(0)
     if data == '#':
