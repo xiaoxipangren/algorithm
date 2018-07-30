@@ -1,8 +1,9 @@
 class BinNode:
-    def __init__(self,data,left=None,right=None):
+    def __init__(self,data,left=None,right=None,weight=None):
         self.data=data
         self.left=left
         self.right=right
+        self.weight=weight
 
 def build(array):
     data = array.pop(0)
@@ -36,6 +37,27 @@ def from_fam(front,mid):
     node.right = from_fam(right_front,right_mid)
 
     return node
+
+
+def huffman(items):
+    array = [BinNode(x,weight=y) for x,y in items]
+    return toHuffman(array)
+
+def toHuffman(array):
+    if len(array) == 1:
+        return array[0]
+    array.sort(key=lambda node:node.weight)
+
+    left = array.pop(0)
+    right = array.pop(0)
+
+    node = BinNode('X',weight=left.weight+right.weight)
+    node.left=left
+    node.right=right
+
+    array.append(node)
+
+    return toHuffman(array)
 
 
 
@@ -119,4 +141,6 @@ if __name__=='__main__':
     # print(visit(node,'back'))
     # print(visit(node,'floor'))
 
-    print(visit(from_bam(list('FDBHGECA'),list('DFBAEHGC')),'back'))
+    items = [('A',5),('B',15),('C',40),('D',30),('E',10)]
+
+    print(visit(huffman(items),'floor'))
