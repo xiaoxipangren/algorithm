@@ -63,22 +63,67 @@ def merge(items):
         step = step * 2
     return items
 
+def merge_recur(items):
+    recur_merge(items,0,len(items))
+    return items
+
+def quick(items):
+    part(items,0,len(items)-1)
+
+def part(items,start,end):
+    if start == end:
+        return
+    axis = partition(items,start,end)
+    part(items,start,axis-1)
+    part(items,axis+1,end)
+
+def partition(items,start,end):
+    axis = items[start]
+    index = start
+    while start < end:
+        while start < end and items[end]>=axis:
+            end = end -1
+        while start < end and items[start]<=axis:
+            start = start + 1
+        switch(items,start,end)
+    switch(items,index,start)
+    return start
+
+
+#归并排序的递归实现
+#
+# 1.将前一半归并有序
+# 2.将后一半归并有序
+# 3.合并前后段
+# 4.退出的条件是前后段的长度为１
+
+
+#递归归并并不遵循1/2/4/8这种步长的增长规律
+#而是每次进行数组的折半操作
+
+def recur_merge(items,start,end):
+    if end-start==1:
+        return
+    mid = (start+end)//2
+    recur_merge(items,start,mid)
+    recur_merge(items,mid,end)
+    fuse(items,start,mid,end)
+
 
 
 def mix(items,step):
     i = 0 
     while i < len(items) - step:
-        fuse(items,i,step)
+        fuse(items,i,i+step,i+2*step)
         i = i + 2 * step
-    print(items)
 
 
-def fuse(items,start,step):
+def fuse(items,start,mid,end):
     temp = []
     left = start
-    right = left+step
+    right = mid
 
-    while left < start+step and left < len(items) and right<len(items) and right < start+2*step:
+    while left < mid and left < len(items) and right<len(items) and right < end:
         if items[left] <= items[right]:
             temp.append(items[left])
             left = left+1
@@ -86,17 +131,16 @@ def fuse(items,start,step):
             temp.append(items[right])
             right = right +1
     
-    while left < start + step and left < len(items):
+    while left < mid and left < len(items):
         temp.append(items[left])
         left = left+1
           
-    while right < start + 2*step and right < len(items):
+    while right < end and right < len(items):
         temp.append(items[right])
         right = right+1
     
     for i in range(len(temp)):
-        items[start+i] = temp[i]
-    
+        items[start+i] = temp[i]    
 
 def adjust(items,end):#构建
     node = end//2 -1
@@ -129,5 +173,5 @@ def test(sortm):
     print()
 
 if __name__ =='__main__':
-    test(merge)
+    test(quick)
 
