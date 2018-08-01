@@ -69,9 +69,12 @@ def merge_recur(items):
 
 def quick(items):
     part(items,0,len(items)-1)
+    return items
+
+
 
 def part(items,start,end):
-    if start == end:
+    if start >= end:
         return
     axis = partition(items,start,end)
     part(items,start,axis-1)

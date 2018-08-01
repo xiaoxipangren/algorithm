@@ -1,3 +1,5 @@
+import math
+
 class BinNode:
     def __init__(self,data,left=None,right=None):
         self.data=data
@@ -28,18 +30,7 @@ def child(node):
 def children(node):
     return node.left != None and node.right != None
 
-def insert(data,tree):
-    if tree == None:
-        return
-    node = find(data,tree)
-    if node.data == data:
-        return 
-    new = BinNode(data)
 
-    if data > node.data:
-        node.right = new
-    if data < node.data:
-        node.left = new
 
 def findParent(tree,node):
     if tree == None:
@@ -53,11 +44,22 @@ def findParent(tree,node):
     if tree.data < node.data:
         return findParent(tree.right,node)
 
+def insert(data,tree):
+
+    if tree == None:
+        return
+
+    node = find(data,tree)
+    if node.data == data:
+        return 
+    new = BinNode(data)
+
+    if data > node.data:
+        node.right = new
+    if data < node.data:
+        node.left = new
 
 def find(data,node):
-    if node == None:
-        return None
-
     if node.data == data:
         return node
     if node.data>data:
@@ -107,10 +109,52 @@ def remove(data,tree):
         return tree
 
 
+
 def mid(node):
     list =[]
     mid_visit(node,list)
-    return list
+    print(list)
+
+def floor(tree):
+    result = []
+    deepth = 1
+    list = [tree]
+
+    while len(list)>0:
+        node =  list.pop(0)
+        result.append(str(node.data))
+        
+        if len(result) == 2**deepth -1:
+            switch = False
+            for i in range(2**(deepth-1)-1,2**deepth-1):
+                if result[i] != '#':
+                    switch=True
+                    break
+            if not switch:
+                break
+            deepth = deepth + 1
+        
+        list.append(node.left if node.left!=None else BinNode('#'))
+        list.append(node.right if node.right!=None else BinNode('#'))
+    print(result)
+    return (deepth,result)
+
+def draw(deepth,nodes):
+    d = 1
+
+    for i in range(nodes):
+        if i == 2**(d-1)-1:
+            for j in range(2**(deepth-d)-1):
+                print(' ',end='') 
+        print(nodes[i])
+        if i == 2**d-1:
+            d=d+1
+            print('')
+        else:
+            for i in range(2**(deepth-d)-1):
+                print(' ')
+
+
 
 def mid_visit(node,list):
     if node == None:
@@ -138,6 +182,10 @@ def bin(item,items):
 if __name__ == '__main__':
     items=[7,3,1,'#','#',5,'#','#',11,9,'#','#',13,'#','#']
     tree = build(items)
+    mid(tree)
 
+    insert(10,tree)
 
+    deepth,nodes = floor(tree)
+    draw(deepth,nodes)
     
