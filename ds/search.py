@@ -131,28 +131,34 @@ def floor(tree):
                     switch=True
                     break
             if not switch:
+                result = result[:2**(deepth-1)-1]
+                deepth = deepth - 1
                 break
             deepth = deepth + 1
         
         list.append(node.left if node.left!=None else BinNode('#'))
         list.append(node.right if node.right!=None else BinNode('#'))
+
     print(result)
-    return (deepth,result)
+    draw(deepth,result)
 
 def draw(deepth,nodes):
     d = 1
 
-    for i in range(nodes):
+    for i in range(len(nodes)):
         if i == 2**(d-1)-1:
             for j in range(2**(deepth-d)-1):
                 print(' ',end='') 
-        print(nodes[i])
-        if i == 2**d-1:
+        print(nodes[i] if nodes[i]!='#' else ' ',end='')
+        if i == 2**d-2:
             d=d+1
             print('')
         else:
-            for i in range(2**(deepth-d)-1):
-                print(' ')
+            for j in range(2**(deepth+1-d)-1):
+                print(' ',end='')
+
+
+
 
 
 
@@ -180,12 +186,21 @@ def bin(item,items):
 
 
 if __name__ == '__main__':
-    items=[7,3,1,'#','#',5,'#','#',11,9,'#','#',13,'#','#']
+    items=[4,2,1,'#','#',3,'#','#',6,5,'#','#',7,'#','#']
     tree = build(items)
-    mid(tree)
+    remove(5,tree)
+    floor(tree)
 
-    insert(10,tree)
+    insert(8,tree)
+    floor(tree)
 
-    deepth,nodes = floor(tree)
-    draw(deepth,nodes)
+    insert(5,tree)
+    floor(tree)
+
+    insert(9,tree)
+    floor(tree)
+
+    remove(8,tree)
+    floor(tree)
+    
     
